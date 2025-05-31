@@ -52,6 +52,53 @@ const { product, images} = data;
   <input type="hidden" id="product-id" value={product.id} />
 </MainLayout>
 
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+    const productIdInput = document.getElementById('product-id') as HTMLInputElement;
+    const sizeElements = document.querySelectorAll('ul li');
+    const quantityInput = document.querySelector('input[type="number"]') as HTMLInputElement;
+    const [btnDecrement, btnIncrement, addToCartButton] = document.querySelectorAll('button');
+
+    sizeElements.forEach(item => {
+      item.addEventListener('click', () => {
+        // Remove 'selected-size' class from all items
+        sizeElements.forEach(li => li.classList.remove('selected-size'));
+        // Add 'selected-size' class to the clicked item
+        item.classList.add('selected-size');
+      });
+    });
+
+    btnDecrement.addEventListener('click', () => {
+      let currentValue = parseInt(quantityInput.value);
+      if (currentValue > 1) {
+        quantityInput.value = (currentValue - 1).toString();
+      }
+    });
+
+    btnIncrement.addEventListener('click', () => {
+      let currentValue = parseInt(quantityInput.value);
+      if (currentValue < 5) {
+        quantityInput.value = (currentValue + 1).toString();
+      }
+    });
+
+    addToCartButton.addEventListener('click', () => {
+      const selectedSize = document.querySelector('ul li.selected-size')
+      if (!selectedSize) {
+        return alert('Por favor, selecciona una talla.');
+      }
+      const size = selectedSize.textContent;
+      const quantity = quantityInput.value;
+      const productId = productIdInput.value;
+
+      console.log({
+        productId,
+        size,
+        quantity
+      });
+    });
+  });
+</script>
 
 <style>
     @reference 'tailwindcss';
