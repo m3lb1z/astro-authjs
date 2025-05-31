@@ -1,9 +1,11 @@
 import { loginUser, logout, registerUser } from "./auth";
 import { getProductsByPage } from "@actions/products/get-products.action";
+import { getProductBySlug } from "./products/get-product-by-slug.action";
 
 export const server = {
   loginUser,
   logout,
   registerUser,
   getProductsByPage,
+  getProductBySlug,
 };

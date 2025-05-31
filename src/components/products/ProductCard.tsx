@@ -14,7 +14,7 @@ export const ProductCard = ({ product }: Props) => {
   const [currentImage, setCurrentImage] = useState(images[0]);
 
   return (
-    <a>
+    <a href={`/products/${product.slug}`}>
       <img
         src={currentImage}
         alt={product.title}
