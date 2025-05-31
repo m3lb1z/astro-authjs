@@ -1,16 +1,18 @@
 ---
+import { ProductList } from '@components/products/ProductList';
 import MainLayout from '@layouts/MainLayout.astro';
-import { getSession } from 'auth-astro/server'
+import { actions } from 'astro:actions';
 
-const session = await getSession(Astro.request);
-const { user } = session || {};
+const {data, error} = await Astro.callAction(actions.getProductsByPage, {});
+
+if (error) {
+  console.error('Error fetching products:', error);
+}
+
+const { products, totalPages} = data!;
 ---
 
 <MainLayout>
-  <h1 class="text-3xl">Home Page</h1>
-  <pre>
-    <code>
-{JSON.stringify(user, null, 2)}
-    </code>
-  </pre>
+  <h1 class="text-3xl">Listado de productos</h1>
+  <ProductList products={products} client:idle/>
 </MainLayout>
