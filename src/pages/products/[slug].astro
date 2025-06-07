@@ -53,6 +53,8 @@ const { product, images} = data;
 </MainLayout>
 
 <script>
+  import { CartCookiesClient } from "src/utils/cart-cookies";
+
   document.addEventListener('DOMContentLoaded', () => {
     const productIdInput = document.getElementById('product-id') as HTMLInputElement;
     const sizeElements = document.querySelectorAll('ul li');
@@ -89,15 +91,17 @@ const { product, images} = data;
       }
 
       addToCartButton.disabled = true;
-      const size = selectedSize.textContent;
-      const quantity = quantityInput.value;
-      const productId = productIdInput.value;
+      const size = selectedSize.textContent!;
+      const quantity = quantityInput.value!;
+      const productId = productIdInput.value!;
 
-      console.log({
+      CartCookiesClient.addItem( {
         productId,
         size,
-        quantity
-      });
+        quantity: parseInt(quantity)
+      })
+
+      window.location.href = '/cart';
     });
   });
 </script>
