@@ -14,22 +14,22 @@ export default async function seed() {
   // Create users
   const users = [
     {
-      id: UUID(),
-      name: "John Doe",
+      id: "ABC-123-JOHN",
+      name: "john doe",
       email: "john@example.com",
       password: bcrypt.hashSync("123456", 10),
       role: "user",
     },
     {
-      id: UUID(),
-      name: "Jane Smith",
+      id: "ABC-123-JANE",
+      name: "jane doe",
       email: "jane@example.com",
       password: bcrypt.hashSync("123456", 10),
       role: "user",
     },
     {
-      id: UUID(),
-      name: "Alice Johnson",
+      id: "ABC-123-ALICE",
+      name: "alice smith",
       email: "alice@example.com",
       password: bcrypt.hashSync("123456", 10),
       role: "admin",
