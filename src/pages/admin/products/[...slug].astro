@@ -216,7 +216,7 @@ const { product, images } = data;
         </div>
 
         <!-- Slideshow -->
-        <ProductSlideshow images={images} />
+        <ProductSlideshow images={images.map(image => image.image)} />
 
         <table class="w-full border">
           <thead>
@@ -227,8 +227,8 @@ const { product, images } = data;
           </thead>
           <tbody>
             {
-              images.map((image) => (
-                <tr class="border">
+              images.map(({image, id}) => (
+                <tr class="border" id={id}>
                   <td class="flex justify-center">
                     <ProductImage
                       src={image}
@@ -237,7 +237,7 @@ const { product, images } = data;
                     />
                   </td>
                   <td class="text-center">
-                    <button class="btn-delete-image">X</button>
+                    <button type="button" data-id={id} class="btn-delete-image">X</button>
                   </td>
                 </tr>
               ))
@@ -271,6 +271,8 @@ document.addEventListener('astro:page-load', () => {
     const sizeButtons = document.querySelectorAll('.btn-size');
     if (!form) return;
 
+    // handle create/update product
+
     form.addEventListener('submit', async (event) => {
         event.preventDefault();
 
@@ -291,5 +293,22 @@ document.addEventListener('astro:page-load', () => {
 
         navigate(`/admin/products/${data.slug}`);
     })
+
+    // delete image
+
+    const btnsDeleteImage = document.querySelectorAll('.btn-delete-image');
+    btnsDeleteImage.forEach((btn) => {
+      btn.addEventListener('click', async (event) => {
+        event.preventDefault();
+        const id = btn.getAttribute('data-id');
+        if (!id) return;
+        const {data, error} = await actions.deleteProductImage(id);
+        if (error) return alert(error.message);
+
+        document.querySelector(`tr[id="${id}"]`)?.remove();
+      })
+    })
+
+
 })
 </script>
