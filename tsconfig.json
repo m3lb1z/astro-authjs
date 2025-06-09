@@ -10,7 +10,8 @@
       "@pages/*": ["src/pages/*"],
       "@styles/*": ["src/styles/*"],
       "@actions/*": ["src/actions/*"],
-      "@utils/*": ["src/utils/*"]
+      "@utils/*": ["src/utils/*"],
+      "@store/*": ["src/store/*"]
     },
     "jsx": "react-jsx",
     "jsxImportSource": "react"
