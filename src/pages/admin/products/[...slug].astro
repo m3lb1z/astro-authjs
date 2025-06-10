@@ -211,6 +211,7 @@ const { product, images } = data;
               type="file"
               accept="image/*"
               multiple
+              class="hidden"
             />
           </label>
         </div>
@@ -309,6 +310,66 @@ document.addEventListener('astro:page-load', () => {
       })
     })
 
+    // drag and drop Images
+    const lblSelectedFiles = document.querySelector('#lbl-selected-files') as HTMLParagraphElement;
+    const dropZone = document.querySelector('#drop-zone') as HTMLLabelElement;
+    const fileInput = document.querySelector('#file-upload') as HTMLInputElement;
+
+    const preventDefaults = (event: DragEvent) => {
+      event.preventDefault();
+      event.stopPropagation();
+    };
+
+    const highlight = (event: DragEvent) => {
+      dropZone.classList.add('border-blue-500', 'bg-blue-50');
+    };
+
+    const unhighlight = (event: DragEvent) => {
+      dropZone.classList.remove('border-blue-500', 'bg-blue-50');
+    };
+
+    const createFileList = (files: File[]): FileList => {
+      const dataTransfer = new DataTransfer();
+      files.forEach(file => dataTransfer.items.add(file));
+      return dataTransfer.files;
+    };
+
+    const handleFiles = (files: FileList) => {
+      // Validar que sean solo imagenes
+      const validFiles = Array.from(files).filter(file => file.type.startsWith('image/'));
+      if (validFiles.length === 0) {
+        alert('Por favor, sube solo imágenes.');
+        return;
+      }
+      
+      // Mostrar los nombres de los archivos seleccionados
+      lblSelectedFiles.innerHTML = `<strong>${validFiles.length} archivo(s) seleccionado(s)</strong>`;
+
+      // Asignar los archivos al input
+      fileInput.files = createFileList(validFiles);
+    };
+
+    (['dragenter', 'dragover', 'dragleave', 'drop'
+    ] as const).forEach(eventName => {
+      dropZone.addEventListener(eventName, preventDefaults);
+      document.body.addEventListener(eventName, preventDefaults);
+    });
+
+    (['dragenter', 'dragover'] as const).forEach(eventName => {
+      dropZone.addEventListener(eventName, highlight);
+    });
+
+    (['dragleave', 'drop'] as const).forEach(eventName => {
+      dropZone.addEventListener(eventName, unhighlight);
+    });
+
+    // Solo imagenes
+    dropZone.addEventListener('drop', (event: DragEvent) => {
+      const files = event.dataTransfer?.files;
+      if (!files || files.length === 0) return;
+
+      handleFiles(files);
+    });
 
 })
 </script>
